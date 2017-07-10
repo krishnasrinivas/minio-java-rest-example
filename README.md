@@ -11,7 +11,7 @@ The full code is available at:  [https://github.com/minio/minio-java-rest-exampl
 
 ##  1. Dependencies
 
-We will use Eclipse IDE to build this example and include Jersey, JSON and asm packages.
+We will use Eclipse IDE for Java EE Developers to build this example and include Jersey, JSON and asm packages.
 
   * Eclipse
   * Jersey Bundle
@@ -26,8 +26,7 @@ We will use Eclipse IDE to build this example and include Jersey, JSON and asm p
  
 Name your project PhotoAPIService
 
-![minio_JAVA2](https://github.com/minio/minio-java-rest-example/blob/master/docs/screenshots/minio-JAVA2.jpg?raw=true)
-
+![minio-server-TomCatv8.5.png](https://github.com/minio/minio-java-rest-example/blob/master/docs/screenshots/minio-server-TomCatv8.5.png?raw=true)
 
 * Step 2 - Convert the project to a Maven Project as shown below
 
@@ -44,8 +43,7 @@ This pom.xml will have all the configuration details that Maven needs, to build 
 
  Here's the full pom.xml generated after adding all the above dependencies successfully. 
 
-![minio_JAVA5](https://github.com/minio/minio-java-rest-example/blob/master/docs/screenshots/minio-JAVA5.jpg?raw=true)
-
+![minio-dependencies3.0.6](https://github.com/minio/minio-java-rest-example/blob/master/docs/screenshots/minio-dependencies3.0.6.png?raw=true)
 
 ```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -104,7 +102,7 @@ This pom.xml will have all the configuration details that Maven needs, to build 
 		<dependency>
 			<groupId>io.minio</groupId>
 			<artifactId>minio</artifactId>
-			<version>1.0.1</version>
+			<version>3.0.6</version>
 		</dependency>
   </dependencies>
 </project>
@@ -236,15 +234,12 @@ public class AlbumDao {
         for (Result<Item> result : myObjects) {
             Item item = result.get();
             System.out.println(item.lastModified() + ", " + item.size() + ", " + item.objectName());
-
-            // Generate a presigned URL which expires in a day
-            url = minioClient.presignedGetObject(minioBucket, item.objectName(), 60 * 60 * 24);
              
             // Create a new Album Object
             Album album = new Album();
             
             // Set the presigned URL in the album object
-            album.setUrl(url);
+            album.setUrl(minioClient.presignedGetObject(minioBucket, item.objectName(), 60 * 60 * 24));
             
             // Add the album object to the list holding Album objects
             list.add(album);
@@ -311,9 +306,9 @@ After Maven install, you should see "BUILD SUCCESS" as shown below in the consol
 * Step 1 - Configure Tomcat
 
     * Click on Servers -> New
-    *  Pick the Tomcat v8.0 Server and then click Next (as shown below)
+    *  Pick the Tomcat v8.5.16 Server and then click Next (as shown below)
 
-![minio_JAVA9](https://github.com/minio/minio-java-rest-example/blob/master/docs/screenshots/minio-JAVA9.jpg?raw=true)
+![minio-server-TomCatv8.5](https://github.com/minio/minio-java-rest-example/blob/master/docs/screenshots/minio-server-TomCatv8.5.png?raw=true)
 
 * Step 2 - Add your Project to the Server
 
